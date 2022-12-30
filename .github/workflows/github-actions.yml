@@ -32,7 +32,8 @@ jobs:
 
       # Run unit tests
       - name: Run tests
-        run: 
+        run: |
+          cd app
           pytest
 
   deploy-staging:
