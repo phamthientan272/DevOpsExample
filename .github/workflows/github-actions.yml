@@ -14,10 +14,12 @@ jobs:
     steps:
       # Checkout the code
       - uses: actions/checkout@v2 
-      
+
       # Run unit tests
       - name: Run tests
-        run: pytest
+        run: |
+          pip install pytest 
+          pytest
 
   deploy-staging:
     runs-on: ubuntu-latest
