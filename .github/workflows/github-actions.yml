@@ -12,6 +12,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code
+      - uses: actions/checkout@v2 
+      
       # Run unit tests
       - name: Run tests
         run: pytest
