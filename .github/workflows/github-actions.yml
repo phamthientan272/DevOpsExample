@@ -1,0 +1,39 @@
+# .github/workflows/ci-cd.yml
+
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - staging
+      - prod
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # Run unit tests
+      - name: Run tests
+        run: pytest
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging'
+    steps:
+      # Build and push the Docker image
+      - name: Build and push image
+        run: |
+          docker build -t phamthientan272/phamthientan272/my-app:staging .
+          docker push phamthientan272/phamthientan272/my-app:staging
+
+      
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/prod'
+    steps:
+      # Build and push the Docker image
+      - name: Build and push image
+        run: |
+          docker build -t phamthientan272/phamthientan272/my-app:prod .
+          docker push phamthientan272/phamthientan272/my-app:prod
