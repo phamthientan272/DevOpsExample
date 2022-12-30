@@ -11,21 +11,46 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8"]
+
     steps:
       # Checkout the code
-      - uses: actions/checkout@v2 
-      
+      - uses: actions/checkout@v3 
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
       # Run unit tests
       - name: Run tests
-        run: pytest
+        run: |
+          cd app
+          pytest
 
   deploy-staging:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/staging'
     steps:
+      # Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    
       # Build and push the Docker image
       - name: Build and push image
         run: |
+          cd ..
           docker build -t phamthientan272/phamthientan272/my-app:staging .
           docker push phamthientan272/phamthientan272/my-app:staging
 
@@ -35,8 +60,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/prod'
     steps:
+      # Login to Docker hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
       # Build and push the Docker image
       - name: Build and push image
         run: |
+          cd .. 
           docker build -t phamthientan272/phamthientan272/my-app:prod .
           docker push phamthientan272/phamthientan272/my-app:prod

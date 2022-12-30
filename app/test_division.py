@@ -1,5 +1,5 @@
-# test_division.py
-from division import divide
+#test_division.py
+from app.division import divide
 
 def test_divide_valid_numbers():
     result = divide(4, 2)
