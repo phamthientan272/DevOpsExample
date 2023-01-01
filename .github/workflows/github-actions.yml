@@ -48,10 +48,19 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
     
       # Build and push the Docker image
-      - name: Build and push image
-        run: |
-          docker build -t phamthientan272/my-app:staging .
-          docker push phamthientan272/my-app:staging
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: phamthientan272/my-app:staging
+
+      # - name: Build and push image
+      #   run: |
+          
+      #     docker build -t phamthientan272/my-app:staging .
+      #     docker push phamthientan272/my-app:staging
 
       
 
