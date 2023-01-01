@@ -2,13 +2,13 @@ version: "3.8"
 
 services:
   app:
-    build: .
+    # build: .
     command: bash -c "uvicorn main:app --host 0.0.0.0 --port 5001 --reload"
     ports:
     - 5001:5001
     volumes:
       - ./app:/app
-    image: phamthientan272/phamthientan272/my-app:latest
+    image: phamthientan272/my-app:staging
     deploy:
         replicas: 3
         placement:
